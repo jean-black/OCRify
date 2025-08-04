@@ -85,9 +85,9 @@ function initializePage() {
             btn.addEventListener('click', () => window.location.href = 'notifications.html');
         } else if (nav === 'profile') {
             btn.addEventListener('click', () => window.location.href = 'profile.html');
-        } else if (btn.innerHTML.includes('🔔')) {
+        } else if (btn.innerHTML.includes('🔔') || btn.innerHTML.includes('bell icon.png')) {
             btn.addEventListener('click', () => window.location.href = 'notifications.html');
-        } else if (btn.innerHTML.includes('👤')) {
+        } else if (btn.innerHTML.includes('👤') || btn.innerHTML.includes('user icon.png')) {
             btn.addEventListener('click', () => window.location.href = 'profile.html');
         }
     });
@@ -652,15 +652,26 @@ async function loadExistingFenceList() {
             const data = await response.json();
             const fenceList = document.getElementById('existingFenceList');
             fenceList.innerHTML = data.fences.map(fence => 
-                `<div class="fence-item" onclick="selectExistingFence('${fence.fence_id}', '${fence.fence_nodes}')">
-                    <strong>${fence.fence_id}</strong><br>
-                    <small>Area: ${fence.area_size} m² | Farm: ${fence.farm_id || 'Unknown'}</small>
+                `<div class="fence-item" data-fence-id="${fence.fence_id}" data-fence-nodes='${fence.fence_nodes}'>
+                    <div class="fence-name" onclick="selectExistingFence('${fence.fence_id}', '${fence.fence_nodes}')">
+                        <strong>${fence.fence_id}</strong>
+                    </div>
+                    <div class="fence-details">
+                        <small>Area: ${fence.area_size} m² | Farm: 
+                            <span class="farm-link" onclick="goToRealTimeTracking('${fence.farm_id || 'Unknown'}')">${fence.farm_id || 'Unknown'}</span>
+                        </small>
+                    </div>
                 </div>`
             ).join('');
         }
     } catch (error) {
         console.error('Load fence list error:', error);
     }
+}
+
+function goToRealTimeTracking(farmId) {
+    console.log('Redirecting to real-time tracking for farm:', farmId);
+    window.location.href = 'tracking.html';
 }
 
 function selectExistingFence(fenceId, fenceNodes) {
