@@ -306,6 +306,65 @@ app.get('/collaborative/:linkId', async (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+app.post('/api/test-email', authenticateToken, async (req, res) => {
+  try {
+    const { receiver } = req.body;
+    const testReceiver = receiver || process.env.GMAIL_RECEIVER || 'jeanclaudemng@gmail.com';
+    
+    const result = await gmailService.sendAlert(
+      testReceiver,
+      'Test Email from SafeZone',
+      'This is a test email to verify Gmail integration is working correctly. If you receive this message, the email system is functioning properly!'
+    );
+    
+    if (result.success) {
+      res.json({ success: true, message: 'Test email sent successfully!', messageId: result.messageId });
+    } else {
+      res.status(500).json({ success: false, error: result.error });
+    }
+  } catch (error) {
+    console.error('Test email error:', error);
+    res.status(500).json({ success: false, error: 'Failed to send test email' });
+  }
+});
+
+app.get('/api/database/test', authenticateToken, async (req, res) => {
+  try {
+    // Test database connectivity
+    const testQuery = await pool.query('SELECT NOW() as current_time, version() as db_version');
+    
+    // Check if main tables exist
+    const tableCheck = await pool.query(`
+      SELECT table_name 
+      FROM information_schema.tables 
+      WHERE table_schema = 'public' 
+      AND table_name LIKE 'dbt%'
+      ORDER BY table_name
+    `);
+    
+    // Count records in main tables
+    const userCount = await pool.query('SELECT COUNT(*) FROM dbt1');
+    
+    res.json({
+      success: true,
+      database: {
+        connected: true,
+        current_time: testQuery.rows[0].current_time,
+        version: testQuery.rows[0].db_version,
+        tables: tableCheck.rows.map(row => row.table_name),
+        user_count: userCount.rows[0].count
+      }
+    });
+  } catch (error) {
+    console.error('Database test error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Database connection failed',
+      details: error.message 
+    });
+  }
+});
+
 app.post('/api/esp32/data', async (req, res) => {
   try {
     const { cowId, gps, speed, tag, alarmState } = req.body;

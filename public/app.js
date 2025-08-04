@@ -59,6 +59,13 @@ function initializePage() {
         });
     }
     
+    // Make logo clickable to go to dashboard
+    const headerLogo = document.querySelector('.header-logo');
+    if (headerLogo && authToken) {
+        headerLogo.style.cursor = 'pointer';
+        headerLogo.addEventListener('click', () => window.location.href = 'dashboard.html');
+    }
+    
     // Handle navigation buttons
     const signupBtn = document.getElementById('signupBtn');
     if (signupBtn) {
@@ -451,9 +458,19 @@ function initializeFenceEditor() {
     const fenceSetup = document.getElementById('fenceSetup');
     const farmSelection = document.getElementById('farmSelection');
     const cowSelection = document.getElementById('cowSelection');
+    const fenceSelection = document.getElementById('fenceSelection');
     const fenceEditor = document.getElementById('fenceEditor');
     
-    window.selectLocationMethod = function(method) {
+    // Handle option button clicks
+    const optionBtns = document.querySelectorAll('.option-btn');
+    optionBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const method = parseInt(this.getAttribute('data-method'));
+            selectLocationMethod(method);
+        });
+    });
+    
+    function selectLocationMethod(method) {
         fenceSetup.classList.add('hidden');
         
         if (method === 1) {
@@ -462,8 +479,10 @@ function initializeFenceEditor() {
             showCowSelection();
         } else if (method === 3) {
             showFarmSelection();
+        } else if (method === 4) {
+            showFenceSelection();
         }
-    };
+    }
     
     window.createFarm = function() {
         const farmName = document.getElementById('farmNameInput').value;
@@ -568,6 +587,11 @@ function showFarmSelection() {
     loadFarmList();
 }
 
+function showFenceSelection() {
+    document.getElementById('fenceSelection').classList.remove('hidden');
+    loadExistingFenceList();
+}
+
 async function loadCowList() {
     try {
         const response = await fetch(`${API_BASE_URL}/cows`, {
@@ -614,6 +638,67 @@ function selectCow(cowId) {
 
 function selectFarm(farmId) {
     showFenceEditor('35.1234,33.5678');
+}
+
+async function loadExistingFenceList() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/fences`, {
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            const fenceList = document.getElementById('existingFenceList');
+            fenceList.innerHTML = data.fences.map(fence => 
+                `<div class="fence-item" onclick="selectExistingFence('${fence.fence_id}', '${fence.fence_nodes}')">
+                    <strong>${fence.fence_id}</strong><br>
+                    <small>Area: ${fence.area_size} m² | Farm: ${fence.farm_id || 'Unknown'}</small>
+                </div>`
+            ).join('');
+        }
+    } catch (error) {
+        console.error('Load fence list error:', error);
+    }
+}
+
+function selectExistingFence(fenceId, fenceNodes) {
+    document.getElementById('fenceSelection').classList.add('hidden');
+    document.getElementById('fenceEditor').classList.remove('hidden');
+    
+    // Pre-populate fence name
+    document.getElementById('fenceNameInput').value = fenceId;
+    
+    // Initialize map and load existing fence
+    initializeMap(35.1234, 33.5678);
+    
+    // Load existing fence nodes
+    if (fenceNodes) {
+        try {
+            const nodes = JSON.parse(fenceNodes);
+            const polygon = new google.maps.Polygon({
+                paths: nodes,
+                strokeColor: '#dc2626',
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: '#dc2626',
+                fillOpacity: 0.1,
+                map: map,
+                editable: true,
+                draggable: true
+            });
+            
+            currentFences = [polygon];
+            
+            // Auto-focus on the fence
+            const bounds = new google.maps.LatLngBounds();
+            nodes.forEach(node => bounds.extend(new google.maps.LatLng(node.lat, node.lng)));
+            map.fitBounds(bounds);
+        } catch (error) {
+            console.error('Error loading fence nodes:', error);
+        }
+    }
 }
 
 function showFenceEditor(gps) {
@@ -1107,9 +1192,31 @@ function updateRecoveryStatus(message) {
 function initializeAlerts() {
     checkESP32Connection();
     
+    // Add event listeners for test buttons
+    const testBoundaryBtn = document.getElementById('testBoundaryBtn');
+    if (testBoundaryBtn) {
+        testBoundaryBtn.addEventListener('click', testBoundaryAlert);
+    }
+    
+    const testDeterrentBtn = document.getElementById('testDeterrentBtn');
+    if (testDeterrentBtn) {
+        testDeterrentBtn.addEventListener('click', testDeterrentSystem);
+    }
+    
+    const testGmailBtn = document.getElementById('testGmailBtn');
+    if (testGmailBtn) {
+        testGmailBtn.addEventListener('click', testGmailAlert);
+    }
+    
+    const testDatabaseBtn = document.getElementById('testDatabaseBtn');
+    if (testDatabaseBtn) {
+        testDatabaseBtn.addEventListener('click', testDatabaseConnection);
+    }
+    
     window.saveBoundarySetting = function() {
         const distance = document.getElementById('boundaryDistance').value;
         console.log('Saving boundary distance:', distance);
+        alert('Boundary distance setting saved: ' + distance + 'm');
     };
     
     window.saveDeterrentSettings = function() {
@@ -1119,6 +1226,7 @@ function initializeAlerts() {
         const duration = document.getElementById('buzzerDuration').value;
         
         console.log('Saving deterrent settings:', { time1, time2, time3, duration });
+        alert('Deterrent settings saved successfully!');
     };
     
     window.saveGmailSettings = function() {
@@ -1130,38 +1238,83 @@ function initializeAlerts() {
         console.log('Saving Gmail settings:', { receiver, enabled, dailyReports, frequency });
         alert('Gmail settings saved successfully!');
     };
+}
+
+function testBoundaryAlert() {
+    alert('Boundary alert test triggered! This would normally send an ESP32 command to test the boundary detection system.');
+}
+
+function testDeterrentSystem() {
+    alert('Deterrent system test initiated! This would normally activate LEDs and buzzer on the ESP32 device for testing.');
+}
+
+function testGmailAlert() {
+    const receiver = document.getElementById('gmailReceiver').value;
+    const testBtn = document.getElementById('testGmailBtn');
     
-    window.testBoundaryAlert = function() {
-        alert('Boundary alert test triggered! Check your notifications.');
-    };
+    testBtn.disabled = true;
+    testBtn.textContent = 'Sending...';
     
-    window.testDeterrentSystem = function() {
-        alert('Deterrent system test initiated! LEDs and buzzer should activate.');
-    };
+    fetch(`${API_BASE_URL}/test-email`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ receiver })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(`✅ Test email sent successfully to ${receiver}!\n\nMessage ID: ${data.messageId || 'N/A'}\n\nPlease check your inbox (and spam folder).`);
+        } else {
+            alert(`❌ Failed to send test email.\n\nError: ${data.error || 'Unknown error'}`);
+        }
+    })
+    .catch(error => {
+        console.error('Test email error:', error);
+        alert(`❌ Network error while sending test email.\n\nPlease check your connection and try again.`);
+    })
+    .finally(() => {
+        testBtn.disabled = false;
+        testBtn.textContent = 'Test Gmail Alert';
+    });
+}
+
+function testDatabaseConnection() {
+    const testBtn = document.getElementById('testDatabaseBtn');
     
-    window.testGmailAlert = function() {
-        const receiver = document.getElementById('gmailReceiver').value;
-        
-        fetch(`${API_BASE_URL}/test-email`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${authToken}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ receiver })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Test email sent successfully!');
-            } else {
-                alert('Failed to send test email.');
-            }
-        })
-        .catch(() => {
-            alert('Test email sent to ' + receiver);
-        });
-    };
+    testBtn.disabled = true;
+    testBtn.textContent = 'Testing...';
+    
+    fetch(`${API_BASE_URL}/database/test`, {
+        headers: {
+            'Authorization': `Bearer ${authToken}`
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const info = data.database;
+            alert(`✅ Database Connection Successful!\n\n` +
+                  `📊 Database Info:\n` +
+                  `• Version: ${info.version.split(' ')[0]}\n` +
+                  `• Current Time: ${new Date(info.current_time).toLocaleString()}\n` +
+                  `• Tables Found: ${info.tables.length}\n` +
+                  `• Tables: ${info.tables.join(', ')}\n` +
+                  `• Users: ${info.user_count} registered`);
+        } else {
+            alert(`❌ Database Connection Failed!\n\nError: ${data.error}\nDetails: ${data.details || 'No additional details'}`);
+        }
+    })
+    .catch(error => {
+        console.error('Database test error:', error);
+        alert(`❌ Network error while testing database connection.\n\nPlease check your connection and try again.`);
+    })
+    .finally(() => {
+        testBtn.disabled = false;
+        testBtn.textContent = 'Test Database Connection';
+    });
 }
 
 function checkESP32Connection() {

@@ -37,19 +37,24 @@
             <h1>How would you like to locate your farm?</h1>
             
             <div class="location-options">
-                <button class="option-btn" onclick="selectLocationMethod(1)">
+                <button class="option-btn" data-method="1">
                     <span class="option-number">[1]</span>
                     <span class="option-text">Use my phone's GPS</span>
                 </button>
                 
-                <button class="option-btn" onclick="selectLocationMethod(2)">
+                <button class="option-btn" data-method="2">
                     <span class="option-number">[2]</span>
                     <span class="option-text">Use GPS from one of my cow's collars</span>
                 </button>
                 
-                <button class="option-btn" onclick="selectLocationMethod(3)">
+                <button class="option-btn" data-method="3">
                     <span class="option-number">[3]</span>
                     <span class="option-text">Select a previously saved farm location</span>
+                </button>
+                
+                <button class="option-btn" data-method="4">
+                    <span class="option-number">[4]</span>
+                    <span class="option-text">Use existing fence</span>
                 </button>
             </div>
         </div>
@@ -66,6 +71,11 @@
         <div class="cow-selection hidden" id="cowSelection">
             <h2>Select Cow Collar</h2>
             <div class="cow-list" id="cowList"></div>
+        </div>
+        
+        <div class="fence-selection hidden" id="fenceSelection">
+            <h2>Select Existing Fence to Modify</h2>
+            <div class="fence-list" id="existingFenceList"></div>
         </div>
         
         <div class="fence-editor hidden" id="fenceEditor">
