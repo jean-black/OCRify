@@ -85,9 +85,9 @@ function initializePage() {
             btn.addEventListener('click', () => window.location.href = 'notifications.html');
         } else if (nav === 'profile') {
             btn.addEventListener('click', () => window.location.href = 'profile.html');
-        } else if (btn.innerHTML.includes('🔔') || btn.innerHTML.includes('bell icon.png')) {
+        } else if (btn.innerHTML.includes('🔔')) {
             btn.addEventListener('click', () => window.location.href = 'notifications.html');
-        } else if (btn.innerHTML.includes('👤') || btn.innerHTML.includes('user icon.png')) {
+        } else if (btn.innerHTML.includes('👤')) {
             btn.addEventListener('click', () => window.location.href = 'profile.html');
         }
     });
@@ -658,7 +658,7 @@ async function loadExistingFenceList() {
                     </div>
                     <div class="fence-details">
                         <small>Area: ${fence.area_size} m² | Farm: 
-                            <span class="farm-link" onclick="goToRealTimeTracking('${fence.farm_id || 'Unknown'}')">${fence.farm_id || 'Unknown'}</span>
+                            <span class="farm-link" onclick="selectExistingFence('${fence.fence_id}', '${fence.fence_nodes}')">${fence.farm_id || 'Unknown'}</span>
                         </small>
                     </div>
                 </div>`
@@ -669,10 +669,6 @@ async function loadExistingFenceList() {
     }
 }
 
-function goToRealTimeTracking(farmId) {
-    console.log('Redirecting to real-time tracking for farm:', farmId);
-    window.location.href = 'tracking.html';
-}
 
 function selectExistingFence(fenceId, fenceNodes) {
     document.getElementById('fenceSelection').classList.add('hidden');
