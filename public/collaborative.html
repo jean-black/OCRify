@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeZone - Collaborative Recovery</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="images/safezone icone.png">
+</head>
+<body class="collaborative-page">
+    <header class="header">
+        <div class="header-left">
+            <img src="images/safezone icone.png" alt="SafeZone Logo" class="header-logo white-fill">
+            <h2>Collaborative Recovery</h2>
+        </div>
+    </header>
+    
+    <main class="main-content">
+        <div class="request-section" id="requestSection">
+            <div class="request-card">
+                <h1>Cow Recovery Request</h1>
+                <p>You have been invited to help recover a lost cow. Do you accept this request?</p>
+                
+                <div class="request-actions">
+                    <button class="btn btn-success" onclick="acceptRequest()">Accept</button>
+                    <button class="btn btn-danger" onclick="denyRequest()">Deny</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="recovery-interface hidden" id="recoveryInterface">
+            <div class="recovery-layout">
+                <div class="map-container">
+                    <div id="collaborativeMap" class="collaborative-map"></div>
+                </div>
+                
+                <div class="recovery-panel">
+                    <h3>Recovery Information</h3>
+                    <div class="recovery-info">
+                        <p><strong>Cow ID:</strong> <span id="recoveryCowId">C001</span></p>
+                        <p><strong>Distance:</strong> <span id="recoveryDistance">150m</span></p>
+                        <p><strong>Status:</strong> <span id="recoveryStatus">Moving towards cow</span></p>
+                        <p><strong>Time:</strong> <span id="recoveryTime">--:--</span></p>
+                    </div>
+                    
+                    <div class="status-messages" id="statusMessages">
+                        <div class="status-message">Navigation started. Please move towards the cow location.</div>
+                    </div>
+                    
+                    <div class="recovery-actions" id="recoveryActions">
+                        <button class="btn btn-primary hidden" id="foundCowBtn" onclick="confirmCowFound()">
+                            Did you find the cow?
+                        </button>
+                        <button class="btn btn-success hidden" id="completedBtn" onclick="completeRecovery()">
+                            Recovery Completed
+                        </button>
+                    </div>
+                    
+                    <div class="countdown-timer hidden" id="countdownTimer">
+                        <p>Time remaining: <span id="countdown">15</span> seconds</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="completion-screen hidden" id="completionScreen">
+            <div class="completion-card">
+                <h1>Well Done!</h1>
+                <p>You have successfully completed the cow recovery task.</p>
+                <p>Thank you for your assistance!</p>
+            </div>
+        </div>
+        
+        <div class="disconnected-screen hidden" id="disconnectedScreen">
+            <div class="disconnected-card">
+                <h1>Session Ended</h1>
+                <p>The collaborative session has been ended by the employer.</p>
+                <p>Thank you for your time.</p>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <div class="footer-content">
+            <p><strong>SafeZone</strong> - Developed by Jean Claude & Samuel</p>
+            <p>Near East University - 2025-2026 - v1.0.0</p>
+        </div>
+    </footer>
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLYSHFujQ9U2deGWsN1oA716j5IQTGf9w&libraries=geometry"></script>
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeZone - Read Notification</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="images/safezone icone.png">
+</head>
+<body class="read-notification-page">
+    <header class="header">
+        <div class="header-left">
+            <button class="menu-btn" id="menuBtn">☰</button>
+            <img src="images/safezone icone.png" alt="SafeZone Logo" class="header-logo white-fill">
+            <button class="back-btn" onclick="window.location.href='notifications.html'">← Back</button>
+        </div>
+        
+        <div class="header-right">
+            <button class="header-btn" onclick="window.location.href='notifications.html'">
+                <span class="bell-icon">🔔</span>
+                <span class="notification-badge" id="notificationBadge">2</span>
+            </button>
+            <button class="header-btn" onclick="window.location.href='profile.html'">
+                <span class="user-icon">👤</span>
+            </button>
+        </div>
+        
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="edit-fences.html">Edit Fences</a>
+            <a href="tracking.html">Real-time Tracking</a>
+            <a href="alerts.html">Customize Alerts</a>
+        </div>
+    </header>
+    
+    <main class="main-content">
+        <div class="notification-detail" id="notificationDetail">
+            <div class="notification-header">
+                <h1 id="notificationTitle">Cow Breach Alert</h1>
+                <div class="notification-meta">
+                    <span class="notification-time" id="notificationTime">2 hours ago</span>
+                    <span class="notification-status" id="notificationStatus">Unread</span>
+                </div>
+            </div>
+            
+            <div class="notification-body" id="notificationBody">
+                <p>Alert: Cow #C001 has breached the fence at Farm A</p>
+                <p>Time of breach: 14:30 PM</p>
+                <p>Location: Latitude 35.1234, Longitude 33.5678</p>
+                <p>Alarm Type: Level 3 - Buzzer activated</p>
+                <p>Current status: Cow is 15 meters outside the fence boundary</p>
+                <p>Action required: Please check the cow's location and guide it back to the safe zone.</p>
+                
+                <div class="alert-actions">
+                    <button class="btn btn-primary" onclick="window.location.href='tracking.html'">View on Map</button>
+                    <button class="btn btn-secondary" onclick="generateCollaborativeLink()">Generate Collaborative Link</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <div class="footer-content">
+            <p><strong>SafeZone</strong> - Developed by Jean Claude & Samuel</p>
+            <p>Near East University - 2025-2026 - v1.0.0</p>
+        </div>
+    </footer>
+    
+    <script src="app.js"></script>
+</body>
+</html>

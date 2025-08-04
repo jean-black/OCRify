@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeZone - Farm Information</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="images/safezone icone.png">
+</head>
+<body class="farm-info-page">
+    <header class="header">
+        <div class="header-left">
+            <button class="menu-btn" id="menuBtn">☰</button>
+            <img src="images/safezone icone.png" alt="SafeZone Logo" class="header-logo white-fill">
+        </div>
+        
+        <div class="header-right">
+            <button class="header-btn" onclick="window.location.href='notifications.html'">
+                <span class="bell-icon">🔔</span>
+                <span class="notification-badge" id="notificationBadge">3</span>
+            </button>
+            <button class="header-btn" onclick="window.location.href='profile.html'">
+                <span class="user-icon">👤</span>
+            </button>
+        </div>
+        
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="edit-fences.html">Edit Fences</a>
+            <a href="tracking.html">Real-time Tracking</a>
+            <a href="alerts.html">Customize Alerts</a>
+        </div>
+    </header>
+    
+    <main class="main-content">
+        <h1>Farm Information</h1>
+        
+        <div class="info-sections">
+            <div class="info-section">
+                <h2>Farm Data</h2>
+                <div class="farm-cards">
+                    <div class="info-card">
+                        <h3>Farm A</h3>
+                        <div class="info-item">
+                            <span class="label">Farm ID:</span>
+                            <span class="value">FARM_001</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">GPS Coordinates:</span>
+                            <span class="value">35.1234, 33.5678</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Number of Cows:</span>
+                            <span class="value">25</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Number of Fences:</span>
+                            <span class="value">3</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Timestamp:</span>
+                            <span class="value">2025-01-15 10:30:00</span>
+                        </div>
+                        <button class="btn btn-primary download-btn" onclick="downloadFarmData('FARM_001')">
+                            📄 Download Farm Data
+                        </button>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3>Farm B</h3>
+                        <div class="info-item">
+                            <span class="label">Farm ID:</span>
+                            <span class="value">FARM_002</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">GPS Coordinates:</span>
+                            <span class="value">35.2345, 33.6789</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Number of Cows:</span>
+                            <span class="value">18</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Number of Fences:</span>
+                            <span class="value">2</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Timestamp:</span>
+                            <span class="value">2025-01-10 14:45:00</span>
+                        </div>
+                        <button class="btn btn-primary download-btn" onclick="downloadFarmData('FARM_002')">
+                            📄 Download Farm Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <h2>Fence Information</h2>
+                <div class="fence-list">
+                    <div class="fence-card">
+                        <h4>North Pasture</h4>
+                        <div class="info-item">
+                            <span class="label">Fence Name:</span>
+                            <span class="value">North Pasture</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Area Size:</span>
+                            <span class="value">1,250 m²</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Number of Nodes:</span>
+                            <span class="value">8</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Timestamp:</span>
+                            <span class="value">2025-01-12 09:15:00</span>
+                        </div>
+                        <button class="btn btn-secondary download-btn" onclick="downloadFenceData('FENCE_001')">
+                            📄 Download Fence Data
+                        </button>
+                    </div>
+                    
+                    <div class="fence-card">
+                        <h4>South Field</h4>
+                        <div class="info-item">
+                            <span class="label">Fence Name:</span>
+                            <span class="value">South Field</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Area Size:</span>
+                            <span class="value">2,100 m²</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Number of Nodes:</span>
+                            <span class="value">12</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Timestamp:</span>
+                            <span class="value">2025-01-08 16:30:00</span>
+                        </div>
+                        <button class="btn btn-secondary download-btn" onclick="downloadFenceData('FENCE_002')">
+                            📄 Download Fence Data
+                        </button>
+                    </div>
+                    
+                    <div class="fence-card">
+                        <h4>East Meadow</h4>
+                        <div class="info-item">
+                            <span class="label">Fence Name:</span>
+                            <span class="value">East Meadow</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Area Size:</span>
+                            <span class="value">1,800 m²</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Number of Nodes:</span>
+                            <span class="value">10</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Timestamp:</span>
+                            <span class="value">2025-01-05 11:20:00</span>
+                        </div>
+                        <button class="btn btn-secondary download-btn" onclick="downloadFenceData('FENCE_003')">
+                            📄 Download Fence Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <h2>Cow Information</h2>
+                <div class="cow-grid">
+                    <div class="cow-card">
+                        <h4>Cow #C001</h4>
+                        <div class="info-item">
+                            <span class="label">Cow ID:</span>
+                            <span class="value">C001</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Most Repeated Tag:</span>
+                            <span class="value">Grazing</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Alarm Breaches:</span>
+                            <span class="value">A1: 5, A2: 2, A3: 1</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Time Inside:</span>
+                            <span class="value">22h 15m</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Time Outside:</span>
+                            <span class="value">1h 45m</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Timestamp:</span>
+                            <span class="value">2025-01-15 18:00:00</span>
+                        </div>
+                        <button class="btn btn-success download-btn" onclick="downloadCowData('C001')">
+                            📄 Download Cow Data
+                        </button>
+                    </div>
+                    
+                    <div class="cow-card">
+                        <h4>Cow #C002</h4>
+                        <div class="info-item">
+                            <span class="label">Cow ID:</span>
+                            <span class="value">C002</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Most Repeated Tag:</span>
+                            <span class="value">Walking</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Alarm Breaches:</span>
+                            <span class="value">A1: 8, A2: 4, A3: 2</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Time Inside:</span>
+                            <span class="value">20h 30m</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Time Outside:</span>
+                            <span class="value">3h 30m</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Timestamp:</span>
+                            <span class="value">2025-01-15 18:00:00</span>
+                        </div>
+                        <button class="btn btn-success download-btn" onclick="downloadCowData('C002')">
+                            📄 Download Cow Data
+                        </button>
+                    </div>
+                    
+                    <div class="cow-card">
+                        <h4>Cow #C003</h4>
+                        <div class="info-item">
+                            <span class="label">Cow ID:</span>
+                            <span class="value">C003</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Most Repeated Tag:</span>
+                            <span class="value">Resting</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Alarm Breaches:</span>
+                            <span class="value">A1: 3, A2: 1, A3: 0</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Time Inside:</span>
+                            <span class="value">23h 10m</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Time Outside:</span>
+                            <span class="value">50m</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Timestamp:</span>
+                            <span class="value">2025-01-15 18:00:00</span>
+                        </div>
+                        <button class="btn btn-success download-btn" onclick="downloadCowData('C003')">
+                            📄 Download Cow Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="download-notice">
+                <h3>📋 Download Notice</h3>
+                <p>All files are stored securely and are downloadable via MEGA cloud links. The data is not human-readable in its raw format but can be processed for analysis and reporting purposes.</p>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <div class="footer-content">
+            <p><strong>SafeZone</strong> - Developed by Jean Claude & Samuel</p>
+            <p>Near East University - 2025-2026 - v1.0.0</p>
+        </div>
+    </footer>
+    
+    <script src="app.js"></script>
+</body>
+</html>

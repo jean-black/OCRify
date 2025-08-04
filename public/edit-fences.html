@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeZone - Edit Fences</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="images/safezone icone.png">
+</head>
+<body class="edit-fences-page">
+    <header class="header">
+        <div class="header-left">
+            <button class="menu-btn" id="menuBtn">☰</button>
+            <img src="images/safezone icone.png" alt="SafeZone Logo" class="header-logo white-fill">
+        </div>
+        
+        <div class="header-right">
+            <button class="header-btn" onclick="window.location.href='notifications.html'">
+                <span class="bell-icon">🔔</span>
+                <span class="notification-badge" id="notificationBadge">3</span>
+            </button>
+            <button class="header-btn" onclick="window.location.href='profile.html'">
+                <span class="user-icon">👤</span>
+            </button>
+        </div>
+        
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="edit-fences.html" class="active">Edit Fences</a>
+            <a href="tracking.html">Real-time Tracking</a>
+            <a href="alerts.html">Customize Alerts</a>
+        </div>
+    </header>
+    
+    <main class="main-content">
+        <div class="fence-setup" id="fenceSetup">
+            <h1>How would you like to locate your farm?</h1>
+            
+            <div class="location-options">
+                <button class="option-btn" onclick="selectLocationMethod(1)">
+                    <span class="option-number">[1]</span>
+                    <span class="option-text">Use my phone's GPS</span>
+                </button>
+                
+                <button class="option-btn" onclick="selectLocationMethod(2)">
+                    <span class="option-number">[2]</span>
+                    <span class="option-text">Use GPS from one of my cow's collars</span>
+                </button>
+                
+                <button class="option-btn" onclick="selectLocationMethod(3)">
+                    <span class="option-number">[3]</span>
+                    <span class="option-text">Select a previously saved farm location</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="farm-selection hidden" id="farmSelection">
+            <h2>Select or Create Farm</h2>
+            <div class="farm-input">
+                <input type="text" id="farmNameInput" placeholder="Enter farm name">
+                <button class="btn btn-primary" onclick="createFarm()">Create Farm</button>
+            </div>
+            <div class="farm-list" id="farmList"></div>
+        </div>
+        
+        <div class="cow-selection hidden" id="cowSelection">
+            <h2>Select Cow Collar</h2>
+            <div class="cow-list" id="cowList"></div>
+        </div>
+        
+        <div class="fence-editor hidden" id="fenceEditor">
+            <div class="editor-sidebar">
+                <h3>Drawing Tools</h3>
+                <div class="tool-buttons">
+                    <button class="tool-btn active" id="polygonTool" onclick="selectTool('polygon')">
+                        <span>📐</span> Polygon
+                    </button>
+                    <button class="tool-btn" id="freehandTool" onclick="selectTool('freehand')">
+                        <span>✏️</span> Freehand
+                    </button>
+                </div>
+                
+                <div class="fence-actions">
+                    <input type="text" id="fenceNameInput" placeholder="Enter fence name">
+                    <button class="btn btn-success" onclick="saveFence()">Save Fence</button>
+                    <button class="btn btn-danger" onclick="deleteFence()">Delete Fence</button>
+                </div>
+                
+                <div class="zoom-controls">
+                    <button class="btn btn-secondary" onclick="zoomIn()">Zoom In</button>
+                    <button class="btn btn-secondary" onclick="zoomOut()">Zoom Out</button>
+                    <button class="btn btn-secondary" onclick="autoFocus()">Auto Focus</button>
+                </div>
+            </div>
+            
+            <div class="map-container">
+                <div id="map" class="fence-map"></div>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <div class="footer-content">
+            <p><strong>SafeZone</strong> - Developed by Jean Claude & Samuel</p>
+            <p>Near East University - 2025-2026 - v1.0.0</p>
+        </div>
+    </footer>
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLYSHFujQ9U2deGWsN1oA716j5IQTGf9w&libraries=drawing"></script>
+    <script src="app.js"></script>
+</body>
+</html>
