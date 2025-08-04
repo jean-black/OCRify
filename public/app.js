@@ -59,6 +59,32 @@ function initializePage() {
         });
     }
     
+    // Handle navigation buttons
+    const signupBtn = document.getElementById('signupBtn');
+    if (signupBtn) {
+        signupBtn.addEventListener('click', () => window.location.href = 'signup.html');
+    }
+    
+    const loginBtn = document.getElementById('loginBtn');
+    if (loginBtn) {
+        loginBtn.addEventListener('click', () => window.location.href = 'index.html');
+    }
+    
+    // Handle header navigation
+    const headerBtns = document.querySelectorAll('.header-btn');
+    headerBtns.forEach(btn => {
+        const nav = btn.getAttribute('data-nav');
+        if (nav === 'notifications') {
+            btn.addEventListener('click', () => window.location.href = 'notifications.html');
+        } else if (nav === 'profile') {
+            btn.addEventListener('click', () => window.location.href = 'profile.html');
+        } else if (btn.innerHTML.includes('🔔')) {
+            btn.addEventListener('click', () => window.location.href = 'notifications.html');
+        } else if (btn.innerHTML.includes('👤')) {
+            btn.addEventListener('click', () => window.location.href = 'profile.html');
+        }
+    });
+    
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', handleLogin);
