@@ -498,6 +498,65 @@ wss.on('connection', (ws) => {
   });
 });
 
+// Cow movement simulation for non-ESP32 cows
+function simulateCowMovement() {
+  setInterval(async () => {
+    try {
+      const cows = await pool.query(`
+        SELECT d5.cow_id, d5.token, 
+               (SELECT real_time_coordinate FROM dbt6 WHERE cow_token = d5.token ORDER BY timestamp DESC LIMIT 1) as real_time_coordinate
+        FROM dbt5 d5
+        WHERE d5.cow_id NOT LIKE 'ESP%'
+      `);
+
+      for (const cow of cows.rows) {
+        let lat, lng;
+        
+        if (cow.real_time_coordinate) {
+          [lat, lng] = cow.real_time_coordinate.split(',').map(Number);
+          
+          // Small random movement (±0.0001 degrees, roughly ±10 meters)
+          lat += (Math.random() - 0.5) * 0.0002;
+          lng += (Math.random() - 0.5) * 0.0002;
+        } else {
+          // Initialize with random position near a central location
+          lat = 35.1234 + (Math.random() - 0.5) * 0.01;
+          lng = 33.5678 + (Math.random() - 0.5) * 0.01;
+        }
+
+        // Update cow position
+        await pool.query(
+          'INSERT INTO dbt6 (cow_token, real_time_coordinate, timestamp) VALUES ($1, $2, NOW())',
+          [cow.token, `${lat},${lng}`]
+        );
+
+        // Simulate random speed (0-15 km/h)
+        const speed = Math.random() * 15;
+        await pool.query(
+          'INSERT INTO dbt8 (cow_token, speed, timestamp) VALUES ($1, $2, NOW())',
+          [cow.token, speed]
+        );
+
+        // Broadcast position update via WebSocket
+        const positionUpdate = {
+          type: 'cow_location',
+          cowId: cow.cow_id,
+          position: `${lat},${lng}`,
+          speed: speed
+        };
+
+        wss.clients.forEach((client) => {
+          if (client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify(positionUpdate));
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Cow simulation error:', error);
+    }
+  }, 5000); // Update every 5 seconds
+}
+
 async function initializeDatabase() {
   try {
     await pool.query(`
@@ -579,6 +638,33 @@ async function initializeDatabase() {
     `);
     
     console.log('Database initialized successfully');
+    
+    // Add test cows if they don't exist
+    const testCows = await pool.query('SELECT COUNT(*) FROM dbt5 WHERE cow_id LIKE $1', ['Random%']);
+    if (parseInt(testCows.rows[0].count) === 0) {
+      const testFarmer = await pool.query('SELECT token FROM dbt1 LIMIT 1');
+      if (testFarmer.rows.length > 0) {
+        const farmerToken = testFarmer.rows[0].token;
+        
+        // Create 5 random test cows
+        for (let i = 1; i <= 5; i++) {
+          const cowId = `Random_Cow_${i}`;
+          const cowToken = generateToken();
+          
+          await pool.query(
+            'INSERT INTO dbt5 (cow_id, token, farmer_token, timestamp) VALUES ($1, $2, $3, NOW())',
+            [cowId, cowToken, farmerToken]
+          );
+        }
+        console.log('Test cows created');
+      }
+    }
+    
+    // Start cow movement simulation after database initialization
+    setTimeout(() => {
+      simulateCowMovement();
+      console.log('Cow movement simulation started');
+    }, 2000);
   } catch (error) {
     console.error('Database initialization error:', error);
   }
