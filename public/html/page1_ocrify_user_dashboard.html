@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCRify - Extract Text from Images</title>
+    <link rel="stylesheet" href="../css/page1_style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <h1>OCRify</h1>
+                <p class="tagline">Extract Text from Images Instantly</p>
+            </div>
+        </header>
+
+        <main>
+            <div class="hero-section">
+                <h2>Transform Images to Text</h2>
+                <p>Upload your images and let our powerful OCR engine extract text instantly. Support for multiple formats with AI-powered file naming.</p>
+            </div>
+
+            <div class="upload-section">
+                <div id="dropZone" class="drop-zone">
+                    <div class="drop-zone-content">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <h3>Drag & Drop your images here</h3>
+                        <p>or</p>
+                        <button id="uploadBtn" class="upload-btn">Select Files</button>
+                        <input type="file" id="fileInput" accept="image/*,.pdf" multiple style="display: none;">
+                    </div>
+                </div>
+
+                <div id="filePreview" class="file-preview" style="display: none;">
+                    <div class="preview-header">
+                        <span id="fileName">No file selected</span>
+                        <button id="removeFileBtn" class="remove-btn">×</button>
+                    </div>
+                    <img id="previewImage" src="" alt="Preview" style="max-width: 100%; max-height: 300px; display: none;">
+                </div>
+
+                <div class="options-section">
+                    <label for="outputFormat">Output Format:</label>
+                    <select id="outputFormat" class="format-select">
+                        <option value="TXT">Text File (.txt)</option>
+                        <option value="PDF">PDF Document (.pdf)</option>
+                    </select>
+                </div>
+
+                <button id="startBtn" class="start-btn" disabled>
+                    <span id="btnText">Start OCR Processing</span>
+                    <span id="spinner" class="spinner" style="display: none;"></span>
+                </button>
+
+                <div id="progressSection" class="progress-section" style="display: none;">
+                    <div class="progress-bar">
+                        <div id="progressFill" class="progress-fill"></div>
+                    </div>
+                    <p id="progressText">Processing...</p>
+                </div>
+            </div>
+
+            <div id="resultsSection" class="results-section" style="display: none;">
+                <h2>OCR Results</h2>
+                <div class="result-card">
+                    <div class="result-info">
+                        <p><strong>Detected Language:</strong> <span id="detectedLanguage">-</span></p>
+                        <p><strong>Processing Time:</strong> <span id="processingTime">-</span></p>
+                        <p><strong>Characters Extracted:</strong> <span id="charCount">-</span></p>
+                    </div>
+                    <div class="extracted-text">
+                        <h3>Extracted Text:</h3>
+                        <textarea id="extractedText" readonly></textarea>
+                    </div>
+                    <button id="downloadBtn" class="download-btn">Download File</button>
+                </div>
+            </div>
+
+            <div id="historySection" class="history-section" style="display: none;">
+                <h2>Recent Files</h2>
+                <div id="historyList" class="history-list"></div>
+            </div>
+        </main>
+
+        <footer>
+            <div class="info-box">
+                <h3>Supported File Types</h3>
+                <p>Upload images in the following formats: <strong>JPG, PNG, GIF, BMP, TIFF, PDF</strong></p>
+                <p>Maximum file size: <strong>10MB</strong></p>
+                <p>For best results, ensure your image has clear, readable text with good contrast.</p>
+            </div>
+            <div class="footer-credits">
+                <p>OCRify v1.0 | Developer: Jean Claude | Near East University</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="../js/page1_script.js"></script>
+</body>
+</html>
