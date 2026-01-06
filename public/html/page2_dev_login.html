@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCRify - Developer Login</title>
+    <link rel="stylesheet" href="../css/dev_style.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="logo">
+                <h1>OCRify</h1>
+                <p>Developer Portal</p>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required placeholder="developer@ocrify.com">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="Enter your password">
+                </div>
+                <button type="submit" class="login-btn">Login</button>
+                <div id="errorMsg" class="error-msg" style="display: none;"></div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/page2_login.js"></script>
+</body>
+</html>
