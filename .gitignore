@@ -1,0 +1,13 @@
+node_modules/
+.DS_Store
+.env
+
+# User-generated files
+uploads/
+output/
+
+# SQLite database
+database/*.db
+
+# Tesseract trained data (large binary — download separately)
+*.traineddata

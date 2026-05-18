@@ -1,0 +1,37 @@
+{
+  "name": "ocrify",
+  "version": "1.0.0",
+  "description": "OCRify - Extract text from images and provide downloadable file output in TXT or PDF format",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js",
+    "init-db": "node server/database.js"
+  },
+  "keywords": [
+    "ocr",
+    "text-extraction",
+    "image-to-text",
+    "tesseract"
+  ],
+  "author": "Jean Claude - Near East University",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^17.4.2",
+    "express": "^4.18.2",
+    "express-session": "^1.19.0",
+    "franc": "^5.0.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^8.0.5",
+    "pdfkit": "^0.14.0",
+    "sqlite3": "^5.1.7",
+    "tesseract.js": "^5.0.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
